@@ -1,1 +1,1 @@
-export * from "./use-mixer";
+export * from './use-mixer'

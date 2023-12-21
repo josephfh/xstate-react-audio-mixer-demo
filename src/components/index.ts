@@ -1,2 +1,2 @@
-export * from "./mixer.component";
-export * from "./track.component";
+export * from './mixer.component'
+export * from './track.component'

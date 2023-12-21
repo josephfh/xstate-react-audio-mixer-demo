@@ -1,5 +1,5 @@
-import "./styles/app.css";
-import { Mixer } from "./components";
+import './styles/app.css'
+import { Mixer } from './components'
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
         <Mixer />
       </div>
     </>
-  );
+  )
 }
 
-export default App;
+export default App

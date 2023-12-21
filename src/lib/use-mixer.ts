@@ -1,13 +1,13 @@
-import { useSelector } from "@xstate/react";
-import { mixerMachine } from "../machines";
-import { createActor } from "xstate";
+import { useSelector } from '@xstate/react'
+import { mixerMachine } from '../machines'
+import { createActor } from 'xstate'
 
-export const mixerActor = createActor(mixerMachine);
+export const mixerActor = createActor(mixerMachine)
 
-mixerActor.start();
+mixerActor.start()
 mixerActor.subscribe((snapshot) => {
-  console.log(snapshot.value);
-});
+  console.log(snapshot.value)
+})
 
 export const useMixer = () => ({
   trackRefs: useSelector(mixerActor, (snapshot) => snapshot.context.trackRefs),
@@ -16,4 +16,4 @@ export const useMixer = () => ({
     (snapshot) => snapshot.context.trackRefs.length
   ),
   send: mixerActor.send,
-});
+})

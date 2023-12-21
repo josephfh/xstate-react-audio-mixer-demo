@@ -1,63 +1,63 @@
-import { ActorRef, Snapshot, assertEvent, assign, createMachine } from "xstate";
-import { MixerMachineEvents } from ".";
+import { ActorRef, Snapshot, assertEvent, assign, createMachine } from 'xstate'
+import { MixerMachineEvents } from '.'
 
-const INITIAL_TRACK_VOLUME = 20;
+const INITIAL_TRACK_VOLUME = 20
 
 export const trackMachine = createMachine(
   {
-    id: "track",
+    id: 'track',
     context: ({ input }) => ({
       id: input.id,
       muted: false,
       parent: input.parent,
       volume: INITIAL_TRACK_VOLUME,
     }),
-    initial: "idle",
+    initial: 'idle',
     states: {
       idle: {
         on: {
-          "track.deleteTrack": {
-            actions: ["deleteTrack"],
+          'track.deleteTrack': {
+            actions: ['deleteTrack'],
           },
-          "track.setVolume": {
-            actions: ["setVolume"],
+          'track.setVolume': {
+            actions: ['setVolume'],
           },
-          "track.toggleMuted": {
-            actions: ["toggleMuted"],
+          'track.toggleMuted': {
+            actions: ['toggleMuted'],
           },
         },
       },
     },
     types: {} as {
       context: {
-        id: string;
-        muted: boolean;
-        parent: ActorRef<Snapshot<unknown>, MixerMachineEvents>;
-        volume: number;
-      };
+        id: string
+        muted: boolean
+        parent: ActorRef<Snapshot<unknown>, MixerMachineEvents>
+        volume: number
+      }
       events:
-        | { type: "track.deleteTrack" }
-        | { type: "track.setVolume"; volume: number }
-        | { type: "track.toggleMuted" };
+        | { type: 'track.deleteTrack' }
+        | { type: 'track.setVolume'; volume: number }
+        | { type: 'track.toggleMuted' }
       input: {
-        id: string;
-        parent: ActorRef<Snapshot<unknown>, MixerMachineEvents>;
-      };
+        id: string
+        parent: ActorRef<Snapshot<unknown>, MixerMachineEvents>
+      }
     },
   },
   {
     actions: {
       deleteTrack: ({ context }) =>
-        context.parent.send({ type: "mixer.deleteTrack", id: context.id }),
+        context.parent.send({ type: 'mixer.deleteTrack', id: context.id }),
       setVolume: assign(({ event }) => {
-        assertEvent(event, "track.setVolume");
+        assertEvent(event, 'track.setVolume')
         return {
           volume: event.volume,
-        };
+        }
       }),
       toggleMuted: assign(({ context }) => ({
         muted: !context.muted,
       })),
     },
   }
-);
+)
