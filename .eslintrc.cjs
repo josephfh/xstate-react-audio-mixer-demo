@@ -14,6 +14,8 @@ module.exports = {
       "warn",
       { allowConstantExport: true },
     ],
-    semi: "off",
+    // semi: ["error", "never"],
+    // "@typescript-eslint/semi": "off",
+    "no-extra-semi": "error",
   },
 };
