@@ -7,15 +7,15 @@ const MAXIMUM_NUMBER_OF_TRACKS = 16;
 export const mixerMachine = createMachine(
   {
     id: "mixer",
-    context: {
-      trackActorRefs: [],
-    },
-    initial: "initializing",
+    context: ({ spawn }) => ({
+      trackActorRefs: [...Array(INITIAL_NUMBER_OF_TRACKS)].map((_, index) =>
+        spawn(trackMachine, {
+          input: { id: `track${index}`, parent: self },
+        })
+      ),
+    }),
+    initial: "idle",
     states: {
-      initializing: {
-        entry: ["createInitialTracks"],
-        always: "idle",
-      },
       idle: {
         on: {
           ["mixer.addTrack"]: {
@@ -59,14 +59,6 @@ export const mixerMachine = createMachine(
       }),
       clearTracks: assign({
         trackActorRefs: [], // TODO: Do the spawned machines also need to be stopped as part of the clean up?
-      }),
-      createInitialTracks: assign({
-        trackActorRefs: ({ self, spawn }) =>
-          [...Array(INITIAL_NUMBER_OF_TRACKS)].map((_, index) =>
-            spawn(trackMachine, {
-              input: { id: `track${index}`, parent: self },
-            })
-          ),
       }),
       deleteTrack: assign(({ context, event }) => {
         if (event.type !== "mixer.deleteTrack") throw new Error();
