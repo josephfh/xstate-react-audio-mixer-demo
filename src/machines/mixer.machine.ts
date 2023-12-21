@@ -1,22 +1,30 @@
-import { ActorRefFrom, assign, createMachine } from "xstate";
+import {
+  ActorRefFrom,
+  assertEvent,
+  assign,
+  createMachine,
+  enqueueActions,
+} from "xstate";
 import { trackMachine } from "./track.machine";
 
 const INITIAL_NUMBER_OF_TRACKS = 8;
 const MAXIMUM_NUMBER_OF_TRACKS = 16;
 
+export type MixerMachineEvents =
+  | { type: "mixer.addTrack" }
+  | { type: "mixer.clearTracks" }
+  | { type: "mixer.deleteTrack"; id: string };
+
 export const mixerMachine = createMachine(
   {
     id: "mixer",
-    context: ({ spawn }) => ({
-      trackActorRefs: [...Array(INITIAL_NUMBER_OF_TRACKS)].map((_, index) =>
-        spawn(trackMachine, {
-          input: { id: `track${index}`, parent: self },
-        })
-      ),
-    }),
+    context: {
+      trackActorRefs: [],
+    },
     initial: "idle",
     states: {
       idle: {
+        entry: ["createInitialTracks"],
         on: {
           ["mixer.addTrack"]: {
             actions: ["addTrack"],
@@ -35,13 +43,7 @@ export const mixerMachine = createMachine(
       context: {
         trackActorRefs: ActorRefFrom<typeof trackMachine>[];
       };
-      events:
-        | { type: "mixer.addTrack" }
-        | { type: "mixer.clearTracks" }
-        | { type: "mixer.deleteTrack"; id: string };
-      guards: {
-        type: "maximumTracksNotReached";
-      };
+      events: MixerMachineEvents;
     },
   },
   {
@@ -51,30 +53,41 @@ export const mixerMachine = createMachine(
           context.trackActorRefs.concat(
             spawn(trackMachine, {
               input: {
-                id: `track${Date.now()}`, // TODO: This machine uses the current timestamp as a unique ID so it can be deleted later. Is there a better way?
+                id: `track${Date.now()}`,
                 parent: self,
               },
             })
           ),
       }),
-      clearTracks: assign({
-        trackActorRefs: [], // TODO: Do the spawned machines also need to be stopped as part of the clean up?
+      clearTracks: enqueueActions(({ context, enqueue }) => {
+        context.trackActorRefs.map((trackActorRef) =>
+          enqueue.stopChild(trackActorRef.id)
+        );
+        enqueue.assign({
+          trackActorRefs: [],
+        });
       }),
-      deleteTrack: assign(({ context, event }) => {
-        if (event.type !== "mixer.deleteTrack") throw new Error();
-        // TODO: How are spawned machines stopped?
-        // TODO: Is there a better way of removing machines rather than use their ID?
-        return {
+      createInitialTracks: assign({
+        trackActorRefs: ({ self, spawn }) =>
+          [...Array(INITIAL_NUMBER_OF_TRACKS)].map((_, index) =>
+            spawn(trackMachine, {
+              input: { id: `track${index}`, parent: self },
+            })
+          ),
+      }),
+      deleteTrack: enqueueActions(({ context, event, enqueue }) => {
+        assertEvent(event, "mixer.deleteTrack");
+        enqueue.assign({
           trackActorRefs: context.trackActorRefs.filter(
             (trackActorRef) =>
               trackActorRef.getSnapshot().context.id !== event.id
           ),
-        };
+        });
+        enqueue.stopChild(event.id);
       }),
     },
     guards: {
       maximumTracksNotReached: ({ context }) => {
-        // TODO: Type error: maximumTracksNotReached is never used in the machine definition
         return context.trackActorRefs.length < MAXIMUM_NUMBER_OF_TRACKS;
       },
     },

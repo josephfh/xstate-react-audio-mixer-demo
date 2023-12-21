@@ -1,6 +1,8 @@
-import { ActorRefFrom, assign, createMachine } from "xstate";
+import { ActorRef, Snapshot, assertEvent, assign, createMachine } from "xstate";
+import { MixerMachineEvents } from ".";
 
 const INITIAL_TRACK_VOLUME = 20;
+
 export const trackMachine = createMachine(
   {
     id: "track",
@@ -30,7 +32,7 @@ export const trackMachine = createMachine(
       context: {
         id: string;
         muted: boolean;
-        parent: any; // TODO: What is the correct type here?
+        parent: ActorRef<Snapshot<unknown>, MixerMachineEvents>;
         volume: number;
       };
       events:
@@ -39,7 +41,7 @@ export const trackMachine = createMachine(
         | { type: "track.toggleMuted" };
       input: {
         id: string;
-        parent: ActorRefFrom<any>; // TODO: What is the correct type here?
+        parent: ActorRef<Snapshot<unknown>, MixerMachineEvents>;
       };
     },
   },
@@ -48,7 +50,7 @@ export const trackMachine = createMachine(
       deleteTrack: ({ context }) =>
         context.parent.send({ type: "mixer.deleteTrack", id: context.id }),
       setVolume: assign(({ event }) => {
-        if (event.type !== "track.setVolume") throw new Error();
+        assertEvent(event, "track.setVolume");
         return {
           volume: event.volume,
         };
