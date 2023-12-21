@@ -2,7 +2,7 @@ import { Track } from ".";
 import { useMixer } from "../lib";
 
 export const Mixer = () => {
-  const { trackActorRefs, trackCount, send } = useMixer();
+  const { trackRefs, trackCount, send } = useMixer();
   return (
     <div className="mixer">
       <div className="track-controls">
@@ -17,12 +17,8 @@ export const Mixer = () => {
         </button>
       </div>
       <div className="tracks">
-        {trackActorRefs.map((trackActorRef, index) => (
-          <Track
-            actorRef={trackActorRef.id}
-            index={index}
-            key={trackActorRef.id}
-          />
+        {trackRefs.map((trackRef, index) => (
+          <Track trackRef={trackRef.id} index={index} key={trackRef.id} />
         ))}
       </div>
     </div>

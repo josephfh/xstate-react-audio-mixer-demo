@@ -10,13 +10,10 @@ mixerActor.subscribe((snapshot) => {
 });
 
 export const useMixer = () => ({
-  trackActorRefs: useSelector(
-    mixerActor,
-    (snapshot) => snapshot.context.trackActorRefs
-  ),
+  trackRefs: useSelector(mixerActor, (snapshot) => snapshot.context.trackRefs),
   trackCount: useSelector(
     mixerActor,
-    (snapshot) => snapshot.context.trackActorRefs.length
+    (snapshot) => snapshot.context.trackRefs.length
   ),
   send: mixerActor.send,
 });

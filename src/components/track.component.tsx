@@ -2,12 +2,12 @@ import { useTrack } from "../lib/use-track";
 import { clsx } from "clsx";
 
 type TrackProps = {
-  actorRef: string;
+  trackRef: string;
   index: number;
 };
 
-export const Track = ({ actorRef, index }: TrackProps) => {
-  const { muted, send, volume } = useTrack(actorRef);
+export const Track = ({ trackRef, index }: TrackProps) => {
+  const { muted, send, volume } = useTrack(trackRef);
   return (
     <div className="track">
       <h3 className="track-number">Track {index + 1}</h3>

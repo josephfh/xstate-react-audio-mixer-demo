@@ -7,7 +7,7 @@ import {
 } from "xstate";
 import { trackMachine } from "./track.machine";
 
-const INITIAL_NUMBER_OF_TRACKS = 8;
+const INITIAL_NUMBER_OF_TRACKS = 4;
 const MAXIMUM_NUMBER_OF_TRACKS = 16;
 
 export type MixerMachineEvents =
@@ -19,7 +19,7 @@ export const mixerMachine = createMachine(
   {
     id: "mixer",
     context: {
-      trackActorRefs: [],
+      trackRefs: [],
     },
     initial: "idle",
     states: {
@@ -41,7 +41,7 @@ export const mixerMachine = createMachine(
     },
     types: {} as {
       context: {
-        trackActorRefs: ActorRefFrom<typeof trackMachine>[];
+        trackRefs: ActorRefFrom<typeof trackMachine>[];
       };
       events: MixerMachineEvents;
     },
@@ -49,8 +49,8 @@ export const mixerMachine = createMachine(
   {
     actions: {
       addTrack: assign({
-        trackActorRefs: ({ context, self, spawn }) =>
-          context.trackActorRefs.concat(
+        trackRefs: ({ context, self, spawn }) =>
+          context.trackRefs.concat(
             spawn(trackMachine, {
               input: {
                 id: `track${Date.now()}`,
@@ -60,15 +60,13 @@ export const mixerMachine = createMachine(
           ),
       }),
       clearTracks: enqueueActions(({ context, enqueue }) => {
-        context.trackActorRefs.map((trackActorRef) =>
-          enqueue.stopChild(trackActorRef.id)
-        );
+        context.trackRefs.map((trackRef) => enqueue.stopChild(trackRef.id));
         enqueue.assign({
-          trackActorRefs: [],
+          trackRefs: [],
         });
       }),
       createInitialTracks: assign({
-        trackActorRefs: ({ self, spawn }) =>
+        trackRefs: ({ self, spawn }) =>
           [...Array(INITIAL_NUMBER_OF_TRACKS)].map((_, index) =>
             spawn(trackMachine, {
               input: { id: `track${index}`, parent: self },
@@ -78,18 +76,16 @@ export const mixerMachine = createMachine(
       deleteTrack: enqueueActions(({ context, event, enqueue }) => {
         assertEvent(event, "mixer.deleteTrack");
         enqueue.assign({
-          trackActorRefs: context.trackActorRefs.filter(
-            (trackActorRef) =>
-              trackActorRef.getSnapshot().context.id !== event.id
+          trackRefs: context.trackRefs.filter(
+            (trackRef) => trackRef.getSnapshot().context.id !== event.id
           ),
         });
         enqueue.stopChild(event.id);
       }),
     },
     guards: {
-      maximumTracksNotReached: ({ context }) => {
-        return context.trackActorRefs.length < MAXIMUM_NUMBER_OF_TRACKS;
-      },
+      maximumTracksNotReached: ({ context }) =>
+        context.trackRefs.length < MAXIMUM_NUMBER_OF_TRACKS,
     },
   }
 );
