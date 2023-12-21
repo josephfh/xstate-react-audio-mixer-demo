@@ -9,6 +9,7 @@ export const useTrack = (actorRef: string) => {
       (trackActorRef) => trackActorRef.id === actorRef
     )
   );
+  // TODO: Is there a better way of dealing with trackRef being seen as possibly unavailable
   const emptyActor = createEmptyActor() as ActorRefFrom<typeof trackMachine>;
   return {
     muted: trackRef
