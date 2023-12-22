@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@xstate/react':
     specifier: ^4.0.1
-    version: 4.0.1(@types/react@18.2.45)(react@18.2.0)(xstate@5.3.1)
+    version: 4.0.1(@types/react@18.2.45)(react@18.2.0)(xstate@5.4.0)
   clsx:
     specifier: ^2.0.0
     version: 2.0.0
@@ -18,27 +18,27 @@ dependencies:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
   xstate:
-    specifier: ^5.3.1
-    version: 5.3.1
+    specifier: ^5.4.0
+    version: 5.4.0
 
 devDependencies:
   '@types/react':
-    specifier: ^18.2.43
+    specifier: ^18.2.45
     version: 18.2.45
   '@types/react-dom':
-    specifier: ^18.2.17
+    specifier: ^18.2.18
     version: 18.2.18
   '@typescript-eslint/eslint-plugin':
-    specifier: ^6.14.0
+    specifier: ^6.15.0
     version: 6.15.0(@typescript-eslint/parser@6.15.0)(eslint@8.56.0)(typescript@5.3.3)
   '@typescript-eslint/parser':
-    specifier: ^6.14.0
+    specifier: ^6.15.0
     version: 6.15.0(eslint@8.56.0)(typescript@5.3.3)
   '@vitejs/plugin-react':
     specifier: ^4.2.1
     version: 4.2.1(vite@5.0.10)
   eslint:
-    specifier: ^8.55.0
+    specifier: ^8.56.0
     version: 8.56.0
   eslint-plugin-react-hooks:
     specifier: ^4.6.0
@@ -47,10 +47,10 @@ devDependencies:
     specifier: ^0.4.5
     version: 0.4.5(eslint@8.56.0)
   typescript:
-    specifier: ^5.2.2
+    specifier: ^5.3.3
     version: 5.3.3
   vite:
-    specifier: ^5.0.8
+    specifier: ^5.0.10
     version: 5.0.10
 
 packages:
@@ -910,7 +910,7 @@ packages:
       - supports-color
     dev: true
 
-  /@xstate/react@4.0.1(@types/react@18.2.45)(react@18.2.0)(xstate@5.3.1):
+  /@xstate/react@4.0.1(@types/react@18.2.45)(react@18.2.0)(xstate@5.4.0):
     resolution: {integrity: sha512-UB9qUC11wcaYd05wGea0mvEA3uTHikNaB4InMZfxD7MVFxzBFU+3JFkemjiN8bDdPJfDrObyP9ZPDVojq2LytA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -922,7 +922,7 @@ packages:
       react: 18.2.0
       use-isomorphic-layout-effect: 1.1.2(@types/react@18.2.45)(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
-      xstate: 5.3.1
+      xstate: 5.4.0
     transitivePeerDependencies:
       - '@types/react'
     dev: false
@@ -1001,8 +1001,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001570
-      electron-to-chromium: 1.4.615
+      caniuse-lite: 1.0.30001571
+      electron-to-chromium: 1.4.616
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.2)
     dev: true
@@ -1012,8 +1012,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /caniuse-lite@1.0.30001570:
-    resolution: {integrity: sha512-+3e0ASu4sw1SWaoCtvPeyXp+5PsjigkSt8OXZbF9StH5pQWbxEjLAZE3n8Aup5udop1uRiKA7a4utUk/uoSpUw==}
+  /caniuse-lite@1.0.30001571:
+    resolution: {integrity: sha512-tYq/6MoXhdezDLFZuCO/TKboTzuQ/xR5cFdgXPfDtM7/kchBO3b4VWghE/OAi/DV7tTdhmLjZiZBZi1fA/GheQ==}
     dev: true
 
   /chalk@2.4.2:
@@ -1109,8 +1109,8 @@ packages:
       esutils: 2.0.3
     dev: true
 
-  /electron-to-chromium@1.4.615:
-    resolution: {integrity: sha512-/bKPPcgZVUziECqDc+0HkT87+0zhaWSZHNXqF8FLd2lQcptpmUFwoCSWjCdOng9Gdq+afKArPdEg/0ZW461Eng==}
+  /electron-to-chromium@1.4.616:
+    resolution: {integrity: sha512-1n7zWYh8eS0L9Uy+GskE0lkBUNK83cXTVJI0pU3mGprFsbfSdAc15VTFbo+A+Bq4pwstmL30AVcEU3Fo463lNg==}
     dev: true
 
   /esbuild@0.19.10:
@@ -1936,8 +1936,8 @@ packages:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
     dev: true
 
-  /xstate@5.3.1:
-    resolution: {integrity: sha512-j4lYbMKqTQ1gxS0NAhjX0JkFJ44OLqYgXV7kVSc0YpnENhPNigvrFMqpBFtfho39pgzdcmpmnmUyEUVWwYMOdA==}
+  /xstate@5.4.0:
+    resolution: {integrity: sha512-FzstraDXixyGp9JAvll7yYLNYVeFlvaM73ATbhJGAIHI7QL6VKo4Q5dMHFAngJghSHeZynyA8NTbMX5ei4p+XA==}
     dev: false
 
   /yallist@3.1.1:

@@ -1,6 +1,6 @@
-import { useSelector } from '@xstate/react'
-import { mixerMachine } from '../machines'
 import { createActor } from 'xstate'
+import { mixerMachine } from '../machines'
+import { useSelector } from '@xstate/react'
 
 export const mixerActor = createActor(mixerMachine)
 
@@ -13,7 +13,7 @@ export const useMixer = () => ({
   trackRefs: useSelector(mixerActor, (snapshot) => snapshot.context.trackRefs),
   trackCount: useSelector(
     mixerActor,
-    (snapshot) => snapshot.context.trackRefs.length
+    (snapshot) => snapshot.context.trackRefs.length,
   ),
   send: mixerActor.send,
 })

@@ -1,5 +1,11 @@
-import { ActorRef, Snapshot, assertEvent, assign, createMachine } from 'xstate'
-import { MixerMachineEvents } from '.'
+import {
+  type ActorRef,
+  type Snapshot,
+  assertEvent,
+  assign,
+  createMachine,
+} from 'xstate'
+import type { MixerMachineEvents } from '.'
 
 const INITIAL_TRACK_VOLUME = 20
 
@@ -59,5 +65,5 @@ export const trackMachine = createMachine(
         muted: !context.muted,
       })),
     },
-  }
+  },
 )

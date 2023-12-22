@@ -1,11 +1,11 @@
-import { useSelector } from '@xstate/react'
+import { type ActorRefFrom, createEmptyActor } from 'xstate'
 import { mixerActor } from '.'
 import { trackMachine } from '../machines'
-import { ActorRefFrom, createEmptyActor } from 'xstate'
+import { useSelector } from '@xstate/react'
 
 export const useTrack = (trackRef: string) => {
   const trackActor = useSelector(mixerActor, (snapshot) =>
-    snapshot.context.trackRefs.find((ref) => ref.id === trackRef)
+    snapshot.context.trackRefs.find((ref) => ref.id === trackRef),
   )
   const emptyActor = createEmptyActor() as ActorRefFrom<typeof trackMachine>
 

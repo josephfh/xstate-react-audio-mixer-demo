@@ -1,5 +1,5 @@
-import { useTrack } from '../lib/use-track'
 import { clsx } from 'clsx'
+import { useTrack } from '../lib'
 
 type TrackProps = {
   trackRef: string
