@@ -1,5 +1,5 @@
 import {
-  ActorRefFrom,
+  type ActorRefFrom,
   assertEvent,
   assign,
   createMachine,
@@ -18,13 +18,16 @@ export type MixerMachineEvents =
 export const mixerMachine = createMachine(
   {
     id: 'mixer',
-    context: {
-      trackRefs: [],
-    },
+    context: ({ self, spawn }) => ({
+      trackRefs: [...Array(INITIAL_NUMBER_OF_TRACKS)].map((_, index) =>
+        spawn(trackMachine, {
+          input: { id: `track${index}`, parent: self },
+        }),
+      ),
+    }),
     initial: 'idle',
     states: {
       idle: {
-        entry: ['createInitialTracks'],
         on: {
           ['mixer.addTrack']: {
             actions: ['addTrack'],
@@ -56,7 +59,7 @@ export const mixerMachine = createMachine(
                 id: `track${Date.now()}`,
                 parent: self,
               },
-            })
+            }),
           ),
       }),
       clearTracks: enqueueActions(({ context, enqueue }) => {
@@ -65,19 +68,11 @@ export const mixerMachine = createMachine(
           trackRefs: [],
         })
       }),
-      createInitialTracks: assign({
-        trackRefs: ({ self, spawn }) =>
-          [...Array(INITIAL_NUMBER_OF_TRACKS)].map((_, index) =>
-            spawn(trackMachine, {
-              input: { id: `track${index}`, parent: self },
-            })
-          ),
-      }),
       deleteTrack: enqueueActions(({ context, event, enqueue }) => {
         assertEvent(event, 'mixer.deleteTrack')
         enqueue.assign({
           trackRefs: context.trackRefs.filter(
-            (trackRef) => trackRef.getSnapshot().context.id !== event.id
+            (trackRef) => trackRef.getSnapshot().context.id !== event.id,
           ),
         })
         enqueue.stopChild(event.id)
@@ -87,5 +82,5 @@ export const mixerMachine = createMachine(
       maximumTracksNotReached: ({ context }) =>
         context.trackRefs.length < MAXIMUM_NUMBER_OF_TRACKS,
     },
-  }
+  },
 )
